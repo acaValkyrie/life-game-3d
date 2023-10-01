@@ -5,11 +5,30 @@ namespace DefaultNamespace
 {
   public class Cell{
     private bool _isAlive;
+    private GameObject _gameObject;
     private Renderer _renderer;
     public Cell(GameObject obj)
     {
-      _renderer = obj.GetComponent<Renderer>();
+      _gameObject = obj;
+      _renderer = _gameObject.GetComponent<Renderer>();
       this.Disable();
+    }
+
+    public Cell(Cell oldCell)
+    {
+      _gameObject = oldCell.GetObject();
+      _renderer = oldCell.GetRenderer();
+      _isAlive = oldCell.IsAlive();
+    }
+
+    public GameObject GetObject()
+    {
+      return _gameObject;
+    }
+    
+    public Renderer GetRenderer()
+    {
+      return _renderer;
     }
 
     public void Disable()
@@ -20,7 +39,7 @@ namespace DefaultNamespace
     public void Enable()
     {
       _isAlive = true;
-      _renderer.material.color = new Color(1f, 0.44f, 0.64f, 0.3f);
+      _renderer.material.color = new Color(0.44f, 0.64f, 1f, 0.3f);
     }
     public bool IsAlive()
     {

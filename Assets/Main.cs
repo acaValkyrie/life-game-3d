@@ -10,9 +10,12 @@ using UnityEngine.Serialization;
 public class Main : MonoBehaviour
 {
     [SerializeField] private GameObject _cellPrefab;
-    private const int numCellsPerSide = 30;
-    
-    [SerializeField][Range(0, numCellsPerSide*numCellsPerSide*numCellsPerSide)] private int initialAliveCellNum = 100;
+    private const int NumCellsPerSide = 30;
+    private const int NumCellsPerSideX = NumCellsPerSide;
+    private const int NumCellsPerSideY = NumCellsPerSide;
+    private const int NumCellsPerSideZ = NumCellsPerSide;
+
+    [SerializeField][Range(0, NumCellsPerSideX*NumCellsPerSideY*NumCellsPerSideZ)] private int initialAliveCellNum = 100;
     
     [SerializeField][Range(0, 3*3*3 -1)] private int deathBorderMin = 4;
     [SerializeField][Range(0, 3*3*3 -1)] private int birthBorderMin = 9;
@@ -20,7 +23,7 @@ public class Main : MonoBehaviour
     [SerializeField][Range(0, 3*3*3 -1)] private int deathBorderMax = 10;
     
     
-    Cell[,,] _cells = new Cell[numCellsPerSide, numCellsPerSide, numCellsPerSide];
+    Cell[,,] _cells = new Cell[NumCellsPerSideX, NumCellsPerSideY, NumCellsPerSideZ];
     
     DisplayText _displayText;
     [SerializeField] private TextMeshProUGUI _textPrefab;
@@ -28,9 +31,9 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for(int x = 0; x < numCellsPerSide; x++) {
-            for(int y = 0; y < numCellsPerSide; y++) {
-                for(int z = 0; z < numCellsPerSide; z++) {
+        for(int x = 0; x < NumCellsPerSideX; x++) {
+            for(int y = 0; y < NumCellsPerSideY; y++) {
+                for(int z = 0; z < NumCellsPerSideZ; z++) {
                     _cells[x, y, z] = new Cell(
                         Instantiate(_cellPrefab, new Vector3(x, y, z), Quaternion.identity));
                 }
@@ -39,12 +42,12 @@ public class Main : MonoBehaviour
         
         // 初期状態のセルの誕生
         for (int i = 0; i <= initialAliveCellNum; i++) {
-            int x = Random.Range(0, numCellsPerSide-1);
-            int y = Random.Range(0, numCellsPerSide-1);
-            int z = Random.Range(0, numCellsPerSide-1);
+            int x = Random.Range(0, (int)(NumCellsPerSideX*0.2f));
+            int y = Random.Range(0, (int)(NumCellsPerSideY*0.2f));
+            int z = Random.Range(0, (int)(NumCellsPerSideZ*0.2f));
             _cells[x, y, z].Enable();
         }
-
+        
         _displayText = new DisplayText(_textPrefab);
         _displayText.SetText("Generation: 0");
     }
@@ -60,12 +63,25 @@ public class Main : MonoBehaviour
         _generation++;
         _displayText.SetText("Generation: " + _generation.ToString());
 
-        Cell[,,] currentCells = _cells;
-        for (int x = 0; x < numCellsPerSide; x++) {
-            for (int y = 0; y < numCellsPerSide; y++) {
-                for (int z = 0; z < numCellsPerSide; z++) {
+        Cell[,,] currentCells = new Cell[NumCellsPerSideX, NumCellsPerSideY, NumCellsPerSideZ];
+        for (int x = 0; x < NumCellsPerSideX; x++) {
+            for (int y = 0; y < NumCellsPerSideY; y++) {
+                for (int z = 0; z < NumCellsPerSideZ; z++)
+                {
+                    currentCells[x, y, z] = new Cell(_cells[x, y, z]);
+                }
+            }
+        }
+        
+        for (int x = 0; x < NumCellsPerSideX; x++) {
+            for (int y = 0; y < NumCellsPerSideY; y++) {
+                for (int z = 0; z < NumCellsPerSideZ; z++) {
                     // 周囲の生きているセルを数える
                     int aroundAliveCount = CountAroundAlives(ref currentCells, x, y, z);
+                    if (currentCells[x, y, z].IsAlive())
+                    {
+                        //Debug.Log($"around alive: {aroundAliveCount}, xyz: ({x}, {y}, {z})");
+                    }
                     
                     // aroundAliveCount に応じてセルを生かすか殺すか決める
                     if ( birthBorderMin <= aroundAliveCount && aroundAliveCount <= birthBorderMax) {
@@ -82,21 +98,25 @@ public class Main : MonoBehaviour
     int CountAroundAlives(ref Cell[,,] currentCells, int x, int y, int z)
     {
         int aroundAliveCount = 0;
-        for (int around_x = x - 1; around_x <= x + 1; around_x++) {
-            for (int around_y = y - 1; around_y <= y + 1; around_y++) {
-                for (int around_z = z - 1; around_z <= z + 1; around_z++) {
-                    if(around_x == x && around_y == y && around_z == z) continue;
-                    if(around_x < 0 || around_x >= numCellsPerSide) continue;
-                    if(around_y < 0 || around_y >= numCellsPerSide) continue;
-                    if(around_z < 0 || around_z >= numCellsPerSide) continue;
-
-                    if (currentCells[around_x, around_y, around_z].IsAlive()) {
+        // Debug.Log("CountAroundAlives");
+        // Debug.Log($"xyz: ({x}, {y}, {z})");
+        // Debug.Log("around:");
+        for (int aroundX = x-1; aroundX <= x+1; aroundX++) {
+            for (int aroundY = y-1; aroundY <= y+1; aroundY++) {
+                for (int aroundZ = z-1; aroundZ <= z+1; aroundZ++) {
+                    // Debug.Log($"({aroundX}, {aroundY}, {aroundZ})");
+                    if(aroundX == x && aroundY == y && aroundZ == z) continue;
+                    if(aroundX < 0 || aroundX >= NumCellsPerSideX) continue;
+                    if(aroundY < 0 || aroundY >= NumCellsPerSideY) continue;
+                    if(aroundZ < 0 || aroundZ >= NumCellsPerSideZ) continue;
+                    if (currentCells[aroundX, aroundY, aroundZ].IsAlive()) {
+                        // Debug.Log($"({x}, {y}, {z})'s around ({aroundX}, {aroundY}, {aroundZ}) is alive.");
                         aroundAliveCount++;
                     }
                 }
             }
         }
-
+        
         return aroundAliveCount;
     }
 }
