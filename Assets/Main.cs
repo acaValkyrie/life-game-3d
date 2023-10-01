@@ -11,9 +11,9 @@ public class Main : MonoBehaviour
 {
     [SerializeField] private GameObject _cellPrefab;
     private const int NumCellsPerSide = 30;
-    private const int NumCellsPerSideX = NumCellsPerSide;
-    private const int NumCellsPerSideY = NumCellsPerSide;
-    private const int NumCellsPerSideZ = NumCellsPerSide;
+    const int NumCellsPerSideX = NumCellsPerSide;
+    const int NumCellsPerSideY = NumCellsPerSide;
+    const int NumCellsPerSideZ = NumCellsPerSide;
 
     [SerializeField][Range(0, NumCellsPerSideX*NumCellsPerSideY*NumCellsPerSideZ)] private int initialAliveCellNum = 100;
     
