@@ -3,12 +3,11 @@ using UnityEngine;
 
 namespace DefaultNamespace
 {
-  public class Cell : MonoBehaviour{
+  public class Cell{
     private bool _isAlive;
     private Renderer _renderer;
-    public Cell(Vector3 position, GameObject prefab)
+    public Cell(GameObject obj)
     {
-      GameObject obj = Instantiate(prefab, position, Quaternion.identity);
       _renderer = obj.GetComponent<Renderer>();
       this.Disable();
     }
