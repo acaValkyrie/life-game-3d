@@ -313,7 +313,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.1688527, y: 0.22197676, z: -0.039062407, w: 0.9595256}
-  m_LocalPosition: {x: -2, y: 12, z: -13}
+  m_LocalPosition: {x: -10, y: 30, z: -40}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -704,12 +704,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cellPrefab: {fileID: 7780900169887874459, guid: 1143d505fef9e904ebc73d2dcc29d867,
     type: 3}
-  initialAliveCellNum: 771
+  initialAliveCellNum: 1851
   deathBorderMin: 4
-  birthBorderMin: 9
+  birthBorderMin: 6
   birthBorderMax: 9
   deathBorderMax: 10
   _textPrefab: {fileID: 1421714211}
+  timeInterval: 0.55
 --- !u!4 &1326737710
 Transform:
   m_ObjectHideFlags: 0
@@ -782,7 +783,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

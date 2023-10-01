@@ -5,18 +5,19 @@ using DefaultNamespace;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Main : MonoBehaviour
 {
     [SerializeField] private GameObject _cellPrefab;
-    private const int numCellsPerSide = 15;
+    private const int numCellsPerSide = 30;
     
     [SerializeField][Range(0, numCellsPerSide*numCellsPerSide*numCellsPerSide)] private int initialAliveCellNum = 100;
     
     [SerializeField][Range(0, 3*3*3 -1)] private int deathBorderMin = 4;
-    [SerializeField][Range(0, 3*3*3 -1)] private int birthBorderMin = 8;
-    [SerializeField][Range(0, 3*3*3 -1)] private int birthBorderMax = 14;
-    [SerializeField][Range(0, 3*3*3 -1)] private int deathBorderMax = 16;
+    [SerializeField][Range(0, 3*3*3 -1)] private int birthBorderMin = 9;
+    [SerializeField][Range(0, 3*3*3 -1)] private int birthBorderMax = 9;
+    [SerializeField][Range(0, 3*3*3 -1)] private int deathBorderMax = 10;
     
     
     Cell[,,] _cells = new Cell[numCellsPerSide, numCellsPerSide, numCellsPerSide];
@@ -45,15 +46,16 @@ public class Main : MonoBehaviour
         }
 
         _displayText = new DisplayText(_textPrefab);
+        _displayText.SetText("Generation: 0");
     }
 
-    private float _timeCurrent = 0.0f;
-    private const float TimeInterval = 0.5f;
+    [SerializeField] private float timeInterval = 0.5f;
+    private float _timeCurrent = 0f;
     private int _generation = 0;
     // Update is called once per frame
     void Update() {
         _timeCurrent += Time.deltaTime;
-        if (TimeInterval > _timeCurrent) return;
+        if (timeInterval > _timeCurrent) return;
         _timeCurrent = 0.0f;
         _generation++;
         _displayText.SetText("Generation: " + _generation.ToString());

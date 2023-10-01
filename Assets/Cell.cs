@@ -20,7 +20,7 @@ namespace DefaultNamespace
     public void Enable()
     {
       _isAlive = true;
-      _renderer.material.color = new Color(0.1f, 0.2f, 0.1f, 0.8f);
+      _renderer.material.color = new Color(1f, 0.44f, 0.64f, 0.3f);
     }
     public bool IsAlive()
     {
