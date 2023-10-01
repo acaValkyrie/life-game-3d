@@ -30,7 +30,8 @@ public class Main : MonoBehaviour
         for(int x = 0; x < numCellsPerSide; x++) {
             for(int y = 0; y < numCellsPerSide; y++) {
                 for(int z = 0; z < numCellsPerSide; z++) {
-                    _cells[x, y, z] = new Cell(new Vector3(x, y, z), _cellPrefab);
+                    _cells[x, y, z] = new Cell(
+                        Instantiate(_cellPrefab, new Vector3(x, y, z), Quaternion.identity));
                 }
             }
         }
