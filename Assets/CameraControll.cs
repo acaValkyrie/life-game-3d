@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class CameraControll : MonoBehaviour
@@ -20,13 +21,15 @@ public class CameraControll : MonoBehaviour
         _initialPosition = _cameraObject.transform.position;
         _radius = Vector3.Distance(_initialPosition, lookAtPosition);
         _cameraObject.transform.LookAt(lookAtPosition);
+        _theta = math.acos(_initialPosition.x/_radius);
+        _phi = math.asin(_initialPosition.y/_radius);
     }
     
     void SetPosition(float theta, float phi)
     {
-        float x = lookAtPosition.x + _radius * Mathf.Sin(theta) * Mathf.Cos(phi);
-        float y = lookAtPosition.y + _radius * Mathf.Sin(theta) * Mathf.Sin(phi);
-        float z = lookAtPosition.z + _radius * Mathf.Cos(theta);
+        float x = lookAtPosition.x + _radius * Mathf.Cos(theta);
+        float y = lookAtPosition.y + _radius * Mathf.Sin(phi);
+        float z = lookAtPosition.z + _radius * Mathf.Sin(theta);
         _cameraObject.transform.position = new Vector3(x, y, z);
         _cameraObject.transform.LookAt(lookAtPosition);
     }
