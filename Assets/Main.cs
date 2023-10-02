@@ -48,6 +48,30 @@ public class Main : MonoBehaviour
             _cells[x, y, z].Enable();
         }
         
+        // _cells[10, 10, 0].Enable();
+        // _cells[10, 11, 0].Enable();
+        // _cells[10, 12, 0].Enable();
+        //
+        // int[,] initialAliveCells = {
+        //     {0, 1, 0, 0, 1, 0},
+        //     {1, 0, 1, 1, 0, 1},
+        //     {0, 1, 0, 0, 1, 0},
+        //     {0, 1, 0, 0, 1, 0},
+        //     {1, 0, 1, 1, 0, 1},
+        //     {0, 1, 0, 0, 1, 0}
+        // };
+        //
+        // for (int i = 0; i < 6; i++)
+        // {
+        //     for (int j = 0; j < 6; j++)
+        //     {
+        //         if (initialAliveCells[i, j] == 1)
+        //         {
+        //             _cells[i+20, j+20, 0].Enable();
+        //         }
+        //     }
+        // }
+
         _displayText = new DisplayText(_textPrefab);
         _displayText.SetText("Generation: 0");
     }
@@ -63,12 +87,11 @@ public class Main : MonoBehaviour
         _generation++;
         _displayText.SetText("Generation: " + _generation.ToString());
 
-        Cell[,,] currentCells = new Cell[NumCellsPerSideX, NumCellsPerSideY, NumCellsPerSideZ];
         for (int x = 0; x < NumCellsPerSideX; x++) {
             for (int y = 0; y < NumCellsPerSideY; y++) {
                 for (int z = 0; z < NumCellsPerSideZ; z++)
                 {
-                    currentCells[x, y, z] = new Cell(_cells[x, y, z]);
+                    _cells[x, y, z].ShiftIsAlive();
                 }
             }
         }
@@ -77,8 +100,8 @@ public class Main : MonoBehaviour
             for (int y = 0; y < NumCellsPerSideY; y++) {
                 for (int z = 0; z < NumCellsPerSideZ; z++) {
                     // 周囲の生きているセルを数える
-                    int aroundAliveCount = CountAroundAlives(ref currentCells, x, y, z);
-                    if (currentCells[x, y, z].IsAlive())
+                    int aroundAliveCount = CountAroundAlives(ref _cells, x, y, z);
+                    if (_cells[x, y, z].IsAlived())
                     {
                         //Debug.Log($"around alive: {aroundAliveCount}, xyz: ({x}, {y}, {z})");
                     }
@@ -93,9 +116,11 @@ public class Main : MonoBehaviour
                 }
             }
         }
+        
+        
     }
     
-    int CountAroundAlives(ref Cell[,,] currentCells, int x, int y, int z)
+    int CountAroundAlives(ref Cell[,,] cells, int x, int y, int z)
     {
         int aroundAliveCount = 0;
         // Debug.Log("CountAroundAlives");
@@ -109,7 +134,7 @@ public class Main : MonoBehaviour
                     if(aroundX < 0 || aroundX >= NumCellsPerSideX) continue;
                     if(aroundY < 0 || aroundY >= NumCellsPerSideY) continue;
                     if(aroundZ < 0 || aroundZ >= NumCellsPerSideZ) continue;
-                    if (currentCells[aroundX, aroundY, aroundZ].IsAlive()) {
+                    if (cells[aroundX, aroundY, aroundZ].IsAlived()) {
                         // Debug.Log($"({x}, {y}, {z})'s around ({aroundX}, {aroundY}, {aroundZ}) is alive.");
                         aroundAliveCount++;
                     }
